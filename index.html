@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sorpresa para Valeria Isabel</title>
+
+<style>
+  :root{
+    --morado: #c084fc;
+    --morado-osc: #7c3aed;
+    --dorado: #f5d98c;
+    --fondo: #000;
+  }
+
+  body{
+    margin:0;
+    background: var(--fondo);
+    font-family: "Poppins", sans-serif;
+    color: var(--morado);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+  }
+
+  .stage{
+    width:100%;
+    max-width:900px;
+    height:80vh;
+    border-radius:18px;
+    background:rgba(255,255,255,0.03);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 30px rgba(245,217,140,0.2),
+               0 0 60px rgba(245,217,140,0.15),
+               inset 0 0 20px rgba(245,217,140,0.25);
+  }
+
+  /* BOTÓN SORPRESA */
+  .surprise-btn{
+    background: linear-gradient(180deg, var(--morado-osc), var(--morado));
+    border:none;
+    color:white;
+    padding:18px 28px;
+    font-size:22px;
+    border-radius:50px;
+    cursor:pointer;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    box-shadow:0 0 18px var(--morado);
+    transition: transform .2s;
+  }
+  .surprise-btn:active{
+    transform:scale(.95);
+  }
+  .gift{
+    font-size:30px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce{
+    0%,100%{ transform:translateY(0) }
+    50%{ transform:translateY(-6px) }
+  }
+
+  /* ESCENA */
+  .scene{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:.6s;
+    pointer-events:none;
+  }
+
+  /* FLORES */
+  .flowers{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+  }
+  .flower{
+    position:absolute;
+    width:60px;
+    height:60px;
+    opacity:0;
+  }
+  .flower.fly{
+    animation: rise 6.5s linear forwards, sway 3.5s ease-in-out infinite;
+  }
+  @keyframes rise{
+    0%{ transform:translateY(60vh) scale(.7); opacity:0 }
+    20%{ opacity:1 }
+    100%{ transform:translateY(-100vh) scale(1); opacity:0 }
+  }
+  @keyframes sway{
+    0%{ transform:translateX(0) }
+    50%{ transform:translateX(18px) }
+    100%{ transform:translateX(0) }
+  }
+
+  /* SOBRE */
+  .card-area{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    height:100%;
+  }
+  .envelope{
+    width:320px;
+    height:220px;
+    perspective:1200px;
+    cursor:pointer;
+  }
+  .env-body{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition: transform .9s;
+    border-radius:12px;
+    box-shadow:0 0 20px var(--dorado);
+    background:rgba(255,255,255,0.05);
+  }
+  .flap{
+    position:absolute;
+    top:0;
+    left:50%;
+    width:105%;
+    height:62%;
+    transform:translateX(-50%);
+    transform-origin:top;
+    background: linear-gradient(180deg, var(--morado), var(--morado-osc));
+    border-radius:12px 12px 60% 60%;
+    transition: transform .9s;
+    box-shadow:0 0 20px var(--morado);
+  }
+  .inner{
+    position:absolute;
+    bottom:0;
+    left:6%;
+    width:88%;
+    height:70%;
+    background:white;
+    border-radius:8px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+  }
+  .letter{
+    width:90%;
+    height:85%;
+    background:white;
+    border-radius:8px;
+    padding:20px;
+    font-size:16px;
+    line-height:1.5;
+    color:#3d155f;
+    opacity:0;
+    transform:translateY(10px);
+    transition: .7s;
+    box-shadow:0 0 20px var(--dorado);
+  }
+
+  .env-open .flap{
+    transform:translateX(-50%) rotateX(180deg);
+  }
+  .env-open .letter{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* TEXTO CON NEÓN DORADO */
+  .neon{
+    color:var(--morado);
+    text-shadow:
+      0 0 8px var(--dorado),
+      0 0 18px var(--dorado),
+      0 0 28px var(--dorado);
+    font-weight:700;
+  }
+
+  .heart{
+    animation:beat 1.2s infinite;
+    color:var(--morado-osc);
+  }
+  @keyframes beat{
+    0%{ transform:scale(1) }
+    50%{ transform:scale(1.15) }
+    100%{ transform:scale(1) }
+  }
+</style>
+
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- BOTÓN -->
+  <div id="start">
+    <button class="surprise-btn" id="btn">
+      <span class="gift">🎁</span> Sorpresa
+    </button>
+  </div>
+
+  <!-- ESCENA -->
+  <div class="scene" id="scene">
+    <div class="flowers" id="flowers"></div>
+
+    <div class="card-area">
+      <div class="envelope" id="envelope">
+        <div class="env-body" id="envBody">
+          <div class="flap"></div>
+          <div class="inner">
+            <div class="letter" id="letter">
+              <div class="neon" style="font-size:20px;margin-bottom:10px;">
+                Para mi princesa hermosa, Valeria Isabel 💜
+              </div>
+
+              Mi amor…  
+              No imaginas cuánto te pienso y cuánto brillo me regalas sin estar aquí conmigo.  
+              Cada flor que aparece es un pedacito de lo que siento por ti: cariño, ternura, deseo de abrazarte y no soltarte nunca.
+
+              <br><br>
+              Eres esa calma que me llena, esa luz que me encuentra siempre, incluso cuando el día está oscuro.  
+              Extrañarte me recuerda lo importante que eres para mí.  
+
+              <br><br>
+              Con todo mi corazón,  
+              <b class="neon">Juan K Mendoza P</b>  
+              <span class="heart">♥</span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const btn = document.getElementById("btn");
+const start = document.getElementById("start");
+const scene = document.getElementById("scene");
+const flowers = document.getElementById("flowers");
+const env = document.getElementById("envelope");
+let opened = false;
+
+/* Crear flor morada SVG */
+function flowerSVG(size){
+  return `
+    <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+      <g transform="translate(50 50)">
+        ${[...Array(8)].map((_,i)=>`
+          <ellipse cx="0" cy="-25" rx="12" ry="22"
+                   transform="rotate(${i*45})"
+                   fill="#c084fc" />`).join("")}
+        <circle cx="0" cy="0" r="10" fill="#fbe8ff"/>
+      </g>
+    </svg>
+  `;
+}
+
+/* Crear flores */
+function spawnFlowers(n=18){
+  flowers.innerHTML = "";
+  for(let i=0;i<n;i++){
+    let f = document.createElement("div");
+    f.className = "flower";
+    let size = 40 + Math.random()*60;
+    f.innerHTML = flowerSVG(size);
+    f.style.left = Math.random()*100 + "%";
+    f.style.animationDelay = (Math.random()*2)+"s";
+    flowers.appendChild(f);
+    requestAnimationFrame(()=> f.classList.add("fly"));
+  }
+}
+
+btn.onclick = () => {
+  start.style.opacity = "0";
+  setTimeout(()=> start.style.display="none", 400);
+  scene.style.opacity = "1";
+  spawnFlowers(22);
+};
+
+env.onclick = () => {
+  if(opened) return;
+  opened = true;
+  document.getElementById("envBody").classList.add("env-open");
+  setTimeout(()=> spawnFlowers(12), 300);
+};
+</script>
+
+</body>
+</html>
